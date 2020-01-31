@@ -3,6 +3,9 @@ enum class HEAPTYPE {
     MIN
 }
 
+/**
+ * 堆（大根或小根）
+ */
 class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
 
     /**
@@ -10,10 +13,19 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
      */
     private val heap = arrayListOf<Int>()
 
+    /**
+     * 堆的大小
+     */
     private var size = 0
 
+    /**
+     * 获取当前堆中最顶部的元素
+     */
     override fun get(): Int? = if (size > 0) heap[0] else null
 
+    /**
+     * 获取当前堆中最顶部的元素，并将其从堆中弹出
+     */
     override fun pop(): Int? {
         val result: Int? = get()
         if (result != null && size >= 1) {
@@ -25,6 +37,9 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
         return result
     }
 
+    /**
+     * 往堆中加入元素
+     */
     override fun put(element: Int) {
         if (heap.size <= size) {
             heap.add(element)
@@ -35,8 +50,14 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
         floatUp(size - 1)
     }
 
+    /**
+     * 当前堆大小
+     */
     override fun size(): Int = size
 
+    /**
+     * 上浮操作
+     */
     private fun floatUp(index: Int) {
         var tempIndex = index
         while (tempIndex > 0) {
@@ -57,6 +78,9 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
         }
     }
 
+    /**
+     * 下沉操作
+     */
     private fun sinkDown(index: Int) {
         var tempIndex = index
         while (tempIndex.indexOfLeft() < size) {
@@ -83,6 +107,9 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
         }
     }
 
+    /**
+     * 元素交换操作
+     */
     private fun swap(first: Int, second: Int) {
         val temp = heap[first]
         heap[first] = heap[second]
@@ -91,10 +118,19 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
 
 }
 
+/**
+ * 左子节点位置
+ */
 fun Int.indexOfLeft(): Int = 2 * this + 1
 
+/**
+ * 右子节点位置
+ */
 fun Int.indexOfRight(): Int = 2 * this + 2
 
+/**
+ * 父节点位置
+ */
 fun Int.indexOfParent(): Int = (this - 1) / 2
 
 interface IHeap<T> {
