@@ -84,7 +84,7 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
     private fun sinkDown(index: Int) {
         var tempIndex = index
         while (tempIndex.indexOfLeft() < size) {
-            var fitChild = -1
+            var fitChild: Int
             if (type == HEAPTYPE.MAX) {
                 fitChild =
                     if (heap[tempIndex.indexOfLeft()] > heap[tempIndex.indexOfRight()] || tempIndex.indexOfRight() >= size) tempIndex.indexOfLeft() else tempIndex.indexOfRight()
@@ -103,7 +103,6 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
                 }
             }
             tempIndex = fitChild
-            if (tempIndex < 0) break
         }
     }
 
