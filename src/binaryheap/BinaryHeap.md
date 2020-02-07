@@ -1,15 +1,17 @@
 # Data Structure : 二叉堆 Binary Heap
 ## 一、概念 Concept
-什么是 二叉堆（Binary Heap）呢？它是一种特殊的完全二叉树。该完全二叉树有以下特点：
+什么是 **二叉堆（Binary Heap）**呢？它是一种特殊的完全二叉树。该完全二叉树有以下特点：
 
-1. 任意一个父节点都一定比其子节点大（或小，如果是小根堆）。此称为“堆序性”，即使操作被快速执行。
+1. 任意一个父节点都一定比其子节点大（或小，如果是小根堆）。此称为“堆序性”，即使得操作可以被快速执行。
 2. 它是一个完全二叉树。即树的非底层的部分被完全填满，底层从左至右依次填入。
+
+下图是一个简单的二叉堆示例：
 
 ![二叉堆](pic/BinaryHeapDemo.png)
 
 二叉堆具有任意父节点都一定比其子节点大的特性，所以时常用于实现排序、优先级等操作，而且其时间复杂度与空间复杂度都比较优秀。下面将详细介绍。
 ## 二、实现 Implement
-由于二叉堆是一个特殊的完全二叉树，所以它可以使用数组来实现，通过数理关系找到对应的节点位置。
+二叉堆是一个特殊的完全二叉树，所以它可以**使用数组来实现**，通过数理关系找到对应的节点位置。
 
 代码实现：
 
@@ -24,19 +26,21 @@ fun Int.indexOfRight(): Int = 2 * this + 2
 fun Int.indexOfParent(): Int = (this - 1) / 2
 ```
 
-对于堆的操作，比较重要的是插入与弹出。
+在堆的众多操作中，比较重要的是**插入**与**弹出**。
 
 ### 插入 Insert
 为了实现堆序性，在插入元素时我们就应该开始考虑它插入的位置是否正确。因此，在插入元素后我们需要为该元素调整位置。
+
 例如说当前我们有一个这样的大根堆（任意父节点都满足大于其子节点）：
 
 ![二叉堆](pic/2_1.png)
 
 现在要往堆中插入一个数据 7。该元素将经历以下过程：
+
 1. 根据完全二叉树的特点，该 7 应该从左到右插入，即插入到数组的末尾（3 节点的左孩子）
 ![二叉堆](pic/2_2.png)
 
-2. 根据堆的特性，与父节点进行比对，若比父节点大则交换，否则则插入成功。7 需要和它的父节点进行比对，以确保父节点为最大。所以经过和 3 的比对发现 7 比 3 大，所以 3 和 7 的位置就进行了互换。
+2. 根据堆的特性，与父节点进行比对交换，以**保证满足堆序性**。若比父节点大则交换，否则则插入成功。*7 需要和它的父节点进行比对，以确保父节点为最大。所以经过和 3 的比对发现 7 比 3 大，所以 3 和 7 的位置就进行了互换。*
 ![二叉堆](pic/2_3.png)
 
 3. 重复执行步骤2，直到新插入元素比父节点小
@@ -44,7 +48,7 @@ fun Int.indexOfParent(): Int = (this - 1) / 2
 所以最后插入元素后的堆长这样：
 ![二叉堆](pic/2_4.png)
 
-插入操作其主要耗时的点在于需要和被插入元素的父节点进行比对并且在适合的时候交换，假设当前堆中元素的数量为 N，而该寻找合适位置最坏情况下是插入的节点为所有元素中最大（或小）的一个，需要把它所有的父节点都交换一遍。所以时间复杂度在最坏情况下应该是 O(log2N)。
+插入操作其主要耗时的点在于**需要和被插入元素的父节点进行比对并且在适合的时候交换**，假设当前堆中元素的数量为 N，而寻找合适位置最坏情况是插入的节点为所有元素中最大（或小，小根堆）的一个，需要把它所有的父节点都对比交换一遍。所以时间复杂度在最坏情况下应该是 O(log2N)。
 代码实现
 
 ```kotlin
@@ -142,16 +146,20 @@ fun sinkDown(index: Int) {
     while (tempIndex.indexOfLeft() < size) {
         var fitChild: Int
         if (type == HEAPTYPE.MAX) {
+            // 找出最大的孩子节点
             fitChild =
-                if (heap[tempIndex.indexOfLeft()] > heap[tempIndex.BinaryHeap.indexOfRight()] || tempIndex.BinaryHeap.indexOfRight() >= size) tempIndex.BinaryHeap.indexOfLeft() else tempIndex.BinaryHeap.indexOfRight()
+                if (heap[tempIndex.indexOfLeft()] > heap[tempIndex.indexOfRight()] || tempIndex.indexOfRight() >= size) tempIndex.indexOfLeft() else tempIndex.indexOfRight()
+            // 判断是否需要交换
             if (heap[tempIndex] < heap[fitChild]) {
                 swap(tempIndex, fitChild)
             } else {
                 break
             }
         } else {
+            // 找出最小孩子节点
             fitChild =
-                if (heap[tempIndex.indexOfLeft()] < heap[tempIndex.BinaryHeap.indexOfRight()] || tempIndex.BinaryHeap.indexOfRight() >= size) tempIndex.BinaryHeap.indexOfLeft() else tempIndex.BinaryHeap.indexOfRight()
+                if (heap[tempIndex.indexOfLeft()] < heap[tempIndex.indexOfRight()] || tempIndex.indexOfRight() >= size) tempIndex.indexOfLeft() else tempIndex.indexOfRight()
+            // 判断是否需要交换
             if (heap[tempIndex] > heap[fitChild]) {
                 swap(tempIndex, fitChild)
             } else {
