@@ -1,3 +1,5 @@
+package binaryheap
+
 enum class HEAPTYPE {
     MAX,
     MIN
@@ -48,6 +50,10 @@ class BinaryHeap(val type: HEAPTYPE = HEAPTYPE.MAX) : IHeap<Int> {
         }
         size++
         floatUp(size - 1)
+        heap.forEach {
+            print("$it ,")
+        }
+        println()
     }
 
     /**
@@ -146,7 +152,7 @@ interface IHeap<T> {
 
 fun main() {
     val heap = BinaryHeap()
-    val arr = arrayListOf(9, 3, 4, 1, 29, 77, 43, 27)
+    val arr = arrayListOf(9, 3, 4, 1, 89, 29, 77, 43, 27)
     arr.forEach {
         heap.put(it)
     }
